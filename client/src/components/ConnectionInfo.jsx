@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { connect } from '../services/websocketService';
 
 const { HOST, PORT } = window.config;
 
@@ -8,8 +9,24 @@ const { HOST, PORT } = window.config;
  * @param {object} props - Component props.
  * @returns {HTMLElement} 
  */
-const ConnectionInfo = ({ isConnected }) => {
-  let backgroundColor = isConnected ? 'green' : 'black';
+const ConnectionInfo = ({ connectedState }) => {
+  const [isVisible, setIsVisible] = useState(true);
+
+  const backgroundColor = connectedState === true
+    ? 'green'
+    : connectedState.error
+      ? 'red'
+      : 'black';
+  const stateStr = connectedState === true
+    ? `Connected to ${HOST}:${PORT}`
+    : connectedState.error
+      ? `Error: ${connectedState.error}`
+      : 'Connecting...';
+
+  // When connectedState changes
+  useEffect(() => {
+    setTimeout(() => setIsVisible(connectedState !== true), 1000);
+  }, [connectedState]);
   
   return (
     <div style={{
@@ -17,12 +34,14 @@ const ConnectionInfo = ({ isConnected }) => {
       flexDirection: 'column',
       justifyContent: 'center',
       width: '100%',
-      height: 35,
+      height: 25,
       color: 'white',
       backgroundColor,
       paddingLeft: 10,
+      transition: '1s',
+      opacity: isVisible ? 1 : 0,
     }}>
-      <div>Connected to: {HOST}:{PORT}</div>
+      <div>{stateStr}</div>
     </div>
   );
 };

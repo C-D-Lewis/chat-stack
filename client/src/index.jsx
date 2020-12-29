@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
+import Column from './components/Column';
 import ConnectionInfo from './components/ConnectionInfo';
 import { connect } from './services/websocketService';
 
@@ -9,17 +10,20 @@ import { connect } from './services/websocketService';
  * @returns {HTMLElement}
  */
 const Application = () => {
-  const [isConnected, setIsConnected] = useState(false);
+  const [connectedState, setConnectedState] = useState(false);
 
   // Upon load, connect to WebSocket server
   useEffect(() => {
-    connect(setIsConnected);
+    connect(setConnectedState);
   }, []);
 
   return (
-    <div>
-      <ConnectionInfo isConnected={isConnected} />
-    </div>
+    <Column style={{
+      backgroundColor: '#111',
+      height: '100vh',
+    }}>
+      <ConnectionInfo connectedState={connectedState} />
+    </Column>
   );
 };
 
