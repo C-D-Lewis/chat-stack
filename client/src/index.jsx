@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
+import ConnectionInfo from './components/ConnectionInfo';
+import { connect } from './services/websocketService';
 
 /**
  * Top level Application component.
@@ -7,7 +9,18 @@ import ReactDOM from 'react-dom';
  * @returns {HTMLElement}
  */
 const Application = () => {
-  return <div>Hello, world!</div>;
+  const [isConnected, setIsConnected] = useState(false);
+
+  // Upon load, connect to WebSocket server
+  useEffect(() => {
+    connect(setIsConnected);
+  }, []);
+
+  return (
+    <div>
+      <ConnectionInfo isConnected={isConnected} />
+    </div>
+  );
 };
 
 ReactDOM.render(<Application />, document.getElementById('app'));
