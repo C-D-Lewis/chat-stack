@@ -1,4 +1,4 @@
-# chat-stack
+# stack-chat
 
 Simple chat app server and client using WebSockets and React.
 
