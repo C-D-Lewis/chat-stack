@@ -1,16 +1,16 @@
 import React from 'react';
 
 /**
- * Column component.
+ * Row component.
  * 
  * @param {object} props - Component props.
  * @returns {HTMLElement} 
  */
-const Column = ({ children, style, ...rest }) => (
+const Row = ({ children, style, ...rest }) => (
   <div
     style={{
       display: 'flex',
-      flexDirection: 'column',
+      flexDirection: 'row',
       width: '100%',
       ...style,
     }}
@@ -19,4 +19,4 @@ const Column = ({ children, style, ...rest }) => (
   </div>
 );
 
-export default Column;
+export default Row;

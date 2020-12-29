@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { connect } from '../services/websocketService';
 
 const { HOST, PORT } = window.config;
 
@@ -37,11 +36,12 @@ const ConnectionInfo = ({ connectedState }) => {
       height: 25,
       color: 'white',
       backgroundColor,
-      paddingLeft: 10,
       transition: '1s',
       opacity: isVisible ? 1 : 0,
     }}>
-      <div>{stateStr}</div>
+      <div style={{ paddingLeft: 10 }}>
+        {stateStr}
+      </div>
     </div>
   );
 };
