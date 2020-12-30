@@ -5,34 +5,11 @@ import ConnectionInfo from './components/ConnectionInfo';
 import MessageInput from './components/MessageInput';
 import MessageList from './components/MessageList';
 import UserNameInput from './components/UserNameInput';
-import { connect, send } from './services/websocketService';
+import { connect, sendMessage } from './services/websocketService';
+import { getRandomColor } from './util';
 
-const TEST_USERNAME = 'foobar';
-const TEST_MESSAGES = [{
-  from: 'Obi-Wan Kenobi',
-  content: 'Hello there',
-  timestamp: 1609322773795,
-  backgroundColor: 'CornflowerBlue',
-}, {
-  from: 'General Grevious',
-  content: 'General Kenobi! You are a bold one. But foolish! I have been trained in your Jedi arts by Count Dooku himself!',
-  timestamp: 1609322821450,
-  backgroundColor: 'DarkRed',
-}];
-
-/**
- * Get a random value 0 - 255
- * 
- * @returns {number} Value to use.
- */
-const getColorValue = () => Math.floor(Math.random() * 255);
-
-/**
- * Get a random color string.
- * 
- * @returns {string} CSS color string.
- */
-const getRandomColor = () => `rgb(${getColorValue()},${getColorValue()},${getColorValue()})`;
+/** Max width */
+const MAX_WIDTH = 800;
 
 /**
  * Top level Application component.
@@ -41,18 +18,29 @@ const getRandomColor = () => `rgb(${getColorValue()},${getColorValue()},${getCol
  */
 const Application = () => {
   const [connectedState, setConnectedState] = useState(false);
-  const [userName, setUserName] = useState(TEST_USERNAME);
-  const [messages, setMessages] = useState(TEST_MESSAGES);
+  const [userName, setUserName] = useState('');
+  const [messages, setMessages] = useState([]);
   const [draft, setDraft] = useState('');
   const [color, setColor] = useState(getRandomColor());
 
   /**
    * Send a message to the server.
    */
-  const sendMessage = () => send(userName, draft, color);
+  const sendDraft = () => sendMessage(userName, draft, color);
 
-  const onMessage = (message) => {
-    setMessages(state => [...state, message]);
+  /**
+   * When a message from the server is received, add it to the chat list.
+   * 
+   * @param {object} json - JSON data received
+   */
+  const onMessage = (json) => {
+    // New message
+    if (json.messages) {
+      setMessages(state => [...state, ...json.messages]);
+    }
+
+    // New participant
+    // TODO: Message type for events
   };
 
   // Upon load, connect to WebSocket server
@@ -64,7 +52,7 @@ const Application = () => {
   useEffect(() => {
     if (draft.length < 1) return;
 
-    sendMessage();
+    sendDraft();
     setDraft('');
   }, [draft]);
 
@@ -80,7 +68,9 @@ const Application = () => {
       <Column
         style={{
           height: '100%',
-          justifyContent: 'flex-end'
+          justifyContent: 'flex-end',
+          maxWidth: MAX_WIDTH,
+          margin: 'auto',
         }}>
         {showUserNameInput && (
           <UserNameInput setUserName={setUserName} />

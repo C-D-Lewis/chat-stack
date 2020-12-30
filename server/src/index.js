@@ -7,13 +7,13 @@ const server = new WebSocket.Server({ port });
  * When a client sends a message.
  * 
  * @param {object} client - Client that sent the message.
- * @param {string} msg - The message.
+ * @param {string} data - The message.
  */
-const onClientMessage = (client, msg) => {
-  console.log(`message: ${msg}`);
+const onClientMessage = (client, data) => {
+  console.log(`message: ${data}`);
 
   // Rebroadcast
-  server.clients.forEach((client) => client.send(msg));
+  server.clients.forEach((client) => client.send(data));
 };
 
 /**
@@ -23,7 +23,7 @@ const onClientMessage = (client, msg) => {
  */
 const onNewClient = client => {
   console.log('New client connected');
-  client.on('message', msg => onClientMessage(client, msg));
+  client.on('message', data => onClientMessage(client, data));
 };
 
 /**

@@ -33,13 +33,14 @@ export const connect = (setConnectedState, onMessage) => {
  * @param {string} draft - Draft message.
  * @param {string} color - This client's color.
  */
-export const send = (userName, draft, color) => {
+export const sendMessage = (userName, draft, color) => {
   const message = {
     from: userName,
     content: draft,
     backgroundColor: color,
     timestamp: Date.now(),
   };
+  const data = JSON.stringify({ messages: [message] });
 
-  socket.send(JSON.stringify(message));
+  socket.send(data);
 };
