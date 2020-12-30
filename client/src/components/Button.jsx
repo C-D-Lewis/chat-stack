@@ -17,6 +17,7 @@ const Button = ({ children, style, disabled, ...rest }) => (
       backgroundColor: '#666',
       cursor: disabled ? 'initial' : 'pointer',
       filter: `brightness(${disabled ? 0.4 : 1}`,
+      alignItems: 'center',
       ...style,
     }}
     {...rest}>
