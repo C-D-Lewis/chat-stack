@@ -11,6 +11,9 @@ const server = new WebSocket.Server({ port });
  */
 const onClientMessage = (client, msg) => {
   console.log(`message: ${msg}`);
+
+  // Rebroadcast
+  server.clients.forEach((client) => client.send(msg));
 };
 
 /**

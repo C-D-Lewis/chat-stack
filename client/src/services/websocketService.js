@@ -5,7 +5,7 @@ let socket;
 /**
  * Connect to the configured server.
  */
-export const connect = (setConnectedState) => {
+export const connect = (setConnectedState, onMessage) => {
   const protocol = HOST.includes('https') ? 'wss://' : 'ws://';
   const uri = `${protocol}${HOST}:${PORT}`;
   console.log(`Connecting to: ${uri}`);
@@ -14,6 +14,7 @@ export const connect = (setConnectedState) => {
     socket = new WebSocket(uri);
     
     socket.addEventListener('open', () => setConnectedState(true));
+    socket.addEventListener('message', event => onMessage(JSON.parse(event.data)));
     socket.addEventListener('error', (event) => {
       alert(event);
       setConnectedState({ error: event });
@@ -29,14 +30,14 @@ export const connect = (setConnectedState) => {
  * Send a message to the server.
  * 
  * @param {string} userName - This client's userName.
- * @param {*} draft - Draft message.
- * @param {*} color - This client's color.
+ * @param {string} draft - Draft message.
+ * @param {string} color - This client's color.
  */
 export const send = (userName, draft, color) => {
   const message = {
     from: userName,
     content: draft,
-    color,
+    backgroundColor: color,
     timestamp: Date.now(),
   };
 

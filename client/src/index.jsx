@@ -51,9 +51,13 @@ const Application = () => {
    */
   const sendMessage = () => send(userName, draft, color);
 
+  const onMessage = (message) => {
+    setMessages(state => [...state, message]);
+  };
+
   // Upon load, connect to WebSocket server
   useEffect(() => {
-    connect(setConnectedState);
+    connect(setConnectedState, onMessage);
   }, []);
 
   // When the draft is updated, send it and clear
@@ -70,7 +74,7 @@ const Application = () => {
   return (
     <Column style={{
       backgroundColor: '#111',
-      height: '100vh',
+      height: '100%',
     }}>
       <ConnectionInfo connectedState={connectedState} />
       <Column
