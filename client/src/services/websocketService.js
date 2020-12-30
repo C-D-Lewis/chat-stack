@@ -25,7 +25,20 @@ export const connect = (setConnectedState) => {
   }
 };
 
-export const sendMessage = () => {
+/**
+ * Send a message to the server.
+ * 
+ * @param {string} userName - This client's userName.
+ * @param {*} draft - Draft message.
+ * @param {*} color - This client's color.
+ */
+export const send = (userName, draft, color) => {
+  const message = {
+    from: userName,
+    content: draft,
+    color,
+    timestamp: Date.now(),
+  };
 
+  socket.send(JSON.stringify(message));
 };
-

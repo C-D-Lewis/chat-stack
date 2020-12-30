@@ -5,7 +5,7 @@ import ConnectionInfo from './components/ConnectionInfo';
 import MessageInput from './components/MessageInput';
 import MessageList from './components/MessageList';
 import UserNameInput from './components/UserNameInput';
-import { connect } from './services/websocketService';
+import { connect, send } from './services/websocketService';
 
 const TEST_USERNAME = 'foobar';
 const TEST_MESSAGES = [{
@@ -21,6 +21,20 @@ const TEST_MESSAGES = [{
 }];
 
 /**
+ * Get a random value 0 - 255
+ * 
+ * @returns {number} Value to use.
+ */
+const getColorValue = () => Math.floor(Math.random() * 255);
+
+/**
+ * Get a random color string.
+ * 
+ * @returns {string} CSS color string.
+ */
+const getRandomColor = () => `rgb(${getColorValue()},${getColorValue()},${getColorValue()})`;
+
+/**
  * Top level Application component.
  * 
  * @returns {HTMLElement}
@@ -30,10 +44,12 @@ const Application = () => {
   const [userName, setUserName] = useState(TEST_USERNAME);
   const [messages, setMessages] = useState(TEST_MESSAGES);
   const [draft, setDraft] = useState('');
+  const [color, setColor] = useState(getRandomColor());
 
-  const sendMessage = () => {
-    // send(userName, draft);
-  }
+  /**
+   * Send a message to the server.
+   */
+  const sendMessage = () => send(userName, draft, color);
 
   // Upon load, connect to WebSocket server
   useEffect(() => {
