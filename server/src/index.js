@@ -4,6 +4,13 @@ const port = process.env.PORT || 8080;
 const server = new WebSocket.Server({ port });
 
 /**
+ * Broadcast data to all clients.
+ * 
+ * @param {string} data - Data to send
+ */
+const broadcast = data => server.clients.forEach(p => p.send(data));
+
+/**
  * When a client sends a message.
  * 
  * @param {object} client - Client that sent the message.
@@ -12,8 +19,8 @@ const server = new WebSocket.Server({ port });
 const onClientMessage = (client, data) => {
   console.log(`message: ${data}`);
 
-  // Rebroadcast
-  server.clients.forEach((client) => client.send(data));
+  // Re-broadcast message to all clients
+  broadcast(data);
 };
 
 /**
@@ -23,7 +30,7 @@ const onClientMessage = (client, data) => {
  */
 const onNewClient = client => {
   console.log('New client connected');
-  client.on('message', data => onClientMessage(client, data));
+  client.on('message', data => onClientMessage(client, data));  
 };
 
 /**

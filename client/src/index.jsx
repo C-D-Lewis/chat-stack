@@ -5,7 +5,7 @@ import ConnectionInfo from './components/ConnectionInfo';
 import MessageInput from './components/MessageInput';
 import MessageList from './components/MessageList';
 import UserNameInput from './components/UserNameInput';
-import { connect, sendMessage } from './services/websocketService';
+import { connect, reportNewUser, sendMessage } from './services/websocketService';
 import { createSystemMessage } from './util';
 import { getRandomColor } from './util';
 
@@ -36,12 +36,19 @@ const Application = () => {
    */
   const onMessage = (json) => {
     // New message
-    if (json.messages) {
-      setMessages(state => [...state, ...json.messages]);
+    if (json.message) {
+      setMessages(state => [...state, json.message]);
     }
 
     // New participant
-    // TODO: Message type for events
+    if (json.event) {
+      const { type, data } = json.event;
+      if (type === 'NewClient') {
+        onMessage({ message: createSystemMessage(`${data.userName} joined the session.`) });
+      }
+
+      // Other types
+    }
   };
 
   // Upon load, connect to WebSocket server
@@ -49,17 +56,16 @@ const Application = () => {
     connect(setConnectedState, onMessage);
   }, []);
 
-  // When the connectedState changes
+  // When the username is chosen
   useEffect(() => {
-    if (connectedState === true) {
-      onMessage({
-        messages: [
-          createSystemMessage('Connected successfully!'),
-          createSystemMessage(window.config.MOTD),
-        ],
-      });
-    }
-  }, [connectedState]);
+    if (userName.length < 3) return;
+
+    // Show the MOTD
+    onMessage({ message: createSystemMessage(window.config.MOTD) });
+
+    // Report new user to others
+    reportNewUser(userName);
+  }, [userName]);
 
   // When the draft is updated, send it and clear
   useEffect(() => {

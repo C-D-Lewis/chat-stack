@@ -40,7 +40,20 @@ export const sendMessage = (userName, draft, color) => {
     backgroundColor: color,
     timestamp: Date.now(),
   };
-  const data = JSON.stringify({ messages: [message] });
 
-  socket.send(data);
+  socket.send(JSON.stringify({ message }));
+};
+
+/**
+ * Send an event message reporting this new user.
+ * 
+ * @param {string} userName - This client's username.
+ */
+export const reportNewUser = (userName) => {
+  const event = {
+    type: 'NewClient',
+    data: { userName },
+  };
+
+  socket.send(JSON.stringify({ event }));
 };
