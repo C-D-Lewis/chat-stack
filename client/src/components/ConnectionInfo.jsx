@@ -33,7 +33,7 @@ const ConnectionInfo = ({ connectedState }) => {
       flexDirection: 'column',
       justifyContent: 'center',
       width: '100%',
-      height: 25,
+      height: 35,
       color: 'white',
       backgroundColor,
       transition: '1s',

@@ -6,6 +6,7 @@ import MessageInput from './components/MessageInput';
 import MessageList from './components/MessageList';
 import UserNameInput from './components/UserNameInput';
 import { connect, sendMessage } from './services/websocketService';
+import { createSystemMessage } from './util';
 import { getRandomColor } from './util';
 
 /** Max width */
@@ -48,6 +49,18 @@ const Application = () => {
     connect(setConnectedState, onMessage);
   }, []);
 
+  // When the connectedState changes
+  useEffect(() => {
+    if (connectedState === true) {
+      onMessage({
+        messages: [
+          createSystemMessage('Connected successfully!'),
+          createSystemMessage(window.config.MOTD),
+        ],
+      });
+    }
+  }, [connectedState]);
+
   // When the draft is updated, send it and clear
   useEffect(() => {
     if (draft.length < 1) return;
@@ -64,7 +77,6 @@ const Application = () => {
       backgroundColor: '#111',
       height: '100%',
     }}>
-      <ConnectionInfo connectedState={connectedState} />
       <Column
         style={{
           height: '100%',
@@ -72,13 +84,14 @@ const Application = () => {
           maxWidth: MAX_WIDTH,
           margin: 'auto',
         }}>
+        <ConnectionInfo connectedState={connectedState} />
         {showUserNameInput && (
           <UserNameInput setUserName={setUserName} />
         )}
         {showMessages && (
           <Column>
             <MessageList messages={messages} />
-            <MessageInput setDraft={setDraft} />
+            <MessageInput color={color} setDraft={setDraft} />
           </Column>
         )}
       </Column>

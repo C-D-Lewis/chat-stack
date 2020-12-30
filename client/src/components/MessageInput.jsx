@@ -8,7 +8,7 @@ import Row from './Row';
  * @param {object} props - Component props.
  * @returns {HTMLElement} 
  */
-const MessageInput = ({ setDraft }) => {
+const MessageInput = ({ color, setDraft }) => {
   const [value, setValue] = useState('');
 
   /**
@@ -22,7 +22,7 @@ const MessageInput = ({ setDraft }) => {
     <Row style={{
       width: '100%',
       height: 40,
-      backgroundColor: '#222',
+      backgroundColor: color,
     }}>
       <input
         type="text"
@@ -35,7 +35,7 @@ const MessageInput = ({ setDraft }) => {
           outline: 'none',
           fontSize: '1rem',
           backgroundColor: '#0000',
-          padding: 5,
+          padding: 10,
           width: '100%',
         }}
         />

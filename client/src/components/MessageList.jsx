@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Column from './Column';
+import { formatDate } from '../util';
+import Row from './Row';
 
 /**
  * Message component.
@@ -10,17 +12,31 @@ import Column from './Column';
 const Message = ({ message }) => (
   <Column
     style={{
-      padding: '2px 0px',
+      padding: '5px 0px',
     }}>
-    <div
-      style={{
-        color: 'lightgray',
-        backgroundColor: '#222',
-        padding: '3px 10px',
-        fontSize: '0.9rem',
-      }}>
-      {message.from}
-    </div>
+      <Row>
+      <div
+        style={{
+          color: 'lightgray',
+          backgroundColor: '#222',
+          padding: '3px 10px',
+          fontSize: '0.9rem',
+          paddingLeft: 5,
+        }}>
+        {message.from}
+      </div>
+      <Column
+        style={{
+          color: 'darkgray',
+          backgroundColor: '#111',
+          padding: '3px 10px',
+          fontSize: '0.7rem',
+          justifyContent: 'center',
+          width: 'initial',
+        }}>
+        {formatDate(message.timestamp)}
+      </Column>
+    </Row>
     <div
       style={{
         color: 'white',
