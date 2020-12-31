@@ -12,8 +12,6 @@ export PORT=8080
 npm start
 ```
 
-TODO: Docker instructions
-
 ## Client
 
 Create a configuration:
@@ -40,3 +38,10 @@ Serve with Python:
 ```shell
 python3 -m http.server
 ```
+
+## TODO
+
+* Dockerfile
+* Terraform deploy
+* Press enter to send
+* Autofocus input after send
