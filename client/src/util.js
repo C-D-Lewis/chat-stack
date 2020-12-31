@@ -1,5 +1,5 @@
 /** System's chat color  */
-const SYSTEM_COLOR = '#444';
+const SYSTEM_COLOR = '#222';
 
 /**
  * Get a random value 0 - 255
@@ -27,6 +27,12 @@ export const formatDate = (timestamp) => {
   return `${shortTime} (${date})`;
 };
 
+/**
+ * Create a message in the chat history by System.
+ * 
+ * @param {string} content - Message content.
+ * @returns {object} The message JSON payload.
+ */
 export const createSystemMessage = (content) => ({
   content,
   backgroundColor: SYSTEM_COLOR,

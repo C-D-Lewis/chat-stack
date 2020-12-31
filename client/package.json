@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack --mode production --config webpack.config.js",
     "create-config": "node scripts/create-config.js",
-    "start": "npm run create-config && python3 -m http.server"
+    "start": "npm run create-config && npm run build && python3 -m http.server"
   },
   "keywords": [],
   "author": "Chris Lewis",

@@ -4,17 +4,18 @@ let socket;
 
 /**
  * Connect to the configured server.
+ * 
+ * @param {function} setConnectedState - Callback to update connectedState.
+ * @param {function} onWebsocketMessage - Callback when a message is received.
  */
-export const connect = (setConnectedState, onMessage) => {
+export const connect = (setConnectedState, onWebsocketMessage) => {
   const protocol = HOST.includes('https') ? 'wss://' : 'ws://';
-  const uri = `${protocol}${HOST}:${PORT}`;
-  console.log(`Connecting to: ${uri}`);
   
   try {
-    socket = new WebSocket(uri);
+    socket = new WebSocket(`${protocol}${HOST}:${PORT}`);
     
     socket.addEventListener('open', () => setConnectedState(true));
-    socket.addEventListener('message', event => onMessage(JSON.parse(event.data)));
+    socket.addEventListener('message', event => onWebsocketMessage(JSON.parse(event.data)));
     socket.addEventListener('error', (event) => {
       alert(event);
       setConnectedState({ error: event });
@@ -27,21 +28,24 @@ export const connect = (setConnectedState, onMessage) => {
 };
 
 /**
- * Send a message to the server.
+ * Send a chat event message to the server.
  * 
  * @param {string} userName - This client's userName.
  * @param {string} draft - Draft message.
  * @param {string} color - This client's color.
  */
 export const sendMessage = (userName, draft, color) => {
-  const message = {
-    from: userName,
-    content: draft,
-    backgroundColor: color,
-    timestamp: Date.now(),
+  const event = {
+    type: 'ChatMessage',
+    data: {
+      from: userName,
+      content: draft,
+      backgroundColor: color,
+      timestamp: Date.now(),
+    }
   };
 
-  socket.send(JSON.stringify({ message }));
+  socket.send(JSON.stringify(event));
 };
 
 /**
@@ -55,5 +59,5 @@ export const reportNewUser = (userName) => {
     data: { userName },
   };
 
-  socket.send(JSON.stringify({ event }));
+  socket.send(JSON.stringify(event));
 };

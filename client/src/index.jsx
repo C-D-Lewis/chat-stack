@@ -32,28 +32,27 @@ const Application = () => {
   /**
    * When a message from the server is received, add it to the chat list.
    * 
-   * @param {object} json - JSON data received
+   * @param {object} event - JSON data received.
    */
-  const onMessage = (json) => {
-    // New message
-    if (json.message) {
-      setMessages(state => [...state, json.message]);
-    }
+  const onWebsocketMessage = (event) => {
+    const { type, data } = event;
 
     // New participant
-    if (json.event) {
-      const { type, data } = json.event;
-      if (type === 'NewClient') {
-        onMessage({ message: createSystemMessage(`${data.userName} joined the session.`) });
-      }
+    if (type === 'NewClient') {
+      onWebsocketMessage({ 
+        type: 'ChatMessage',
+        data: createSystemMessage(`${data.userName} joined the session.`),
+      });
+    }
 
-      // Other types
+    if (type === 'ChatMessage') {
+      setMessages(state => [...state, data]);
     }
   };
 
   // Upon load, connect to WebSocket server
   useEffect(() => {
-    connect(setConnectedState, onMessage);
+    connect(setConnectedState, onWebsocketMessage);
   }, []);
 
   // When the username is chosen
@@ -61,7 +60,10 @@ const Application = () => {
     if (userName.length < 3) return;
 
     // Show the MOTD
-    onMessage({ message: createSystemMessage(window.config.MOTD) });
+    onWebsocketMessage({ 
+      type: 'ChatMessage',
+      data: createSystemMessage(window.config.MOTD),
+    });
 
     // Report new user to others
     reportNewUser(userName);
