@@ -29,15 +29,13 @@ const ConnectionInfo = ({ connectedState }) => {
   
   return (
     <div style={{
-      display: 'flex',
+      display: isVisible ? 'flex' : 'none',
       flexDirection: 'column',
       justifyContent: 'center',
       width: '100%',
       height: 35,
       color: 'white',
       backgroundColor,
-      transition: '1s',
-      opacity: isVisible ? 1 : 0,
     }}>
       <div style={{ paddingLeft: 10 }}>
         {stateStr}

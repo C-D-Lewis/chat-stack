@@ -55,9 +55,7 @@ const Message = ({ message }) => (
  * @returns {HTMLElement} 
  */
 const MessageList = ({ messages }) => (
-  <Column style={{
-    paddingBottom: 10,
-  }}>
+  <Column style={{ paddingBottom: 60 }}>
     {messages.map((p) => <Message message={p} />)}
   </Column>
 );

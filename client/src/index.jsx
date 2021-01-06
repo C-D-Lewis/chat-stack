@@ -97,9 +97,10 @@ const Application = () => {
           <UserNameInput setUserName={setUserName} />
         )}
         {showMessages && (
-          <Column>
-            <MessageList messages={messages} />
+          <Column
+            style={{ overflowY: 'scroll' }}>
             <MessageInput color={color} setDraft={setDraft} />
+            <MessageList messages={messages} />
           </Column>
         )}
       </Column>

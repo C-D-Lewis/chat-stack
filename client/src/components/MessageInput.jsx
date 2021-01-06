@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Button from './Button';
 import Row from './Row';
 
@@ -10,6 +10,7 @@ import Row from './Row';
  */
 const MessageInput = ({ color, setDraft }) => {
   const [value, setValue] = useState('');
+  const inputRef = useRef(null);
 
   /**
    * When the input value changes.
@@ -18,8 +19,15 @@ const MessageInput = ({ color, setDraft }) => {
    */
   const onChange = ({ target }) => setValue(target.value);
 
+  // When the component mounts
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
   return (
     <Row style={{
+      position: 'fixed',
+      bottom: 0,
       width: '100%',
       height: 40,
       backgroundColor: color,
@@ -29,6 +37,7 @@ const MessageInput = ({ color, setDraft }) => {
         value={value}
         onChange={onChange}
         placeholder="Enter message..."
+        ref={inputRef}
         style={{
           border: 'none',
           color: 'white',
@@ -44,6 +53,8 @@ const MessageInput = ({ color, setDraft }) => {
         onClick={() => {
           setDraft(value);
           setValue('');
+
+          inputRef.current.focus();
         }}>
         Send
       </Button>
