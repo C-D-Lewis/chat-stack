@@ -11,9 +11,7 @@ import Row from './Row';
  */
 const Message = ({ message }) => (
   <Column
-    style={{
-      padding: '5px 0px',
-    }}>
+    style={{ padding: '5px 0px' }}>
       <Row>
       <div
         style={{
@@ -55,7 +53,11 @@ const Message = ({ message }) => (
  * @returns {HTMLElement} 
  */
 const MessageList = ({ messages }) => (
-  <Column style={{ paddingBottom: 60 }}>
+  <Column style={{
+    paddingBottom: 20,
+    overflowY: 'scroll',
+    height: '100%',
+  }}>
     {messages.map((p) => <Message message={p} />)}
   </Column>
 );

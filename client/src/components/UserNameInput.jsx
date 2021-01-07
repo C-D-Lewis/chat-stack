@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Button from './Button';
 import Row from './Row';
 
@@ -10,6 +10,7 @@ import Row from './Row';
  */
 const UserNameInput = ({ setUserName }) => {
   const [value, setValue] = useState('');
+  const inputRef = useRef(null);
 
   /**
    * When the input value changes.
@@ -17,6 +18,27 @@ const UserNameInput = ({ setUserName }) => {
    * @param {object} event - onChange event. 
    */
   const onChange = ({ target }) => setValue(target.value);
+
+  /**
+   * When the username should be submitted.
+   */
+  const onSubmit = () => setUserName(value);
+
+  /**
+   * When a key is pressed.
+   * 
+   * @param {object} event - Event. 
+   */
+  const onKeyPress = ({ key }) => {
+    if (key === 'Enter') {
+      onSubmit();
+    }
+  };
+
+  // When the component mounts
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   return (
     <Row style={{
@@ -27,6 +49,8 @@ const UserNameInput = ({ setUserName }) => {
       <input
         type="text"
         onChange={onChange}
+        onKeyPress={onKeyPress}
+        ref={inputRef}
         placeholder="Enter username..."
         style={{
           border: 'none',
@@ -40,7 +64,7 @@ const UserNameInput = ({ setUserName }) => {
         />
       <Button 
         disabled={value.length < 3}
-        onClick={() => setUserName(value)}>
+        onClick={onSubmit}>
         Submit
       </Button>
     </Row>
