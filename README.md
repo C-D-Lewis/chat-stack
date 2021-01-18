@@ -2,6 +2,8 @@
 
 Simple chat app server and client using WebSockets and React.
 
+![](assets/screenshot.png)
+
 ## Server
 
 Start with `npm`:
